@@ -1,5 +1,7 @@
 from settings import custom_log_line_length as len_line
+
 import numpy as np
+import os
 
 
 class Log(object):
@@ -163,5 +165,12 @@ class Log(object):
         :param log: the content of log/logs to appended.
         :return: None
         """
+        Log.ensure_dir(file)
         with open(file, 'a') as f:
             f.write(log)
+
+    @staticmethod
+    def ensure_dir(file):
+        d = os.path.dirname(file)
+        if not os.path.exists(d) and d != '':
+            os.makedirs(d)

@@ -1,9 +1,21 @@
+import datetime
+import os
+#import uuid
+
 VERSION = '0.11'
 
 url = None
 url_file = None
 
-target_file = 'testlog.log'
+def generate_filename():
+    #return filename = uuid.uuid4().hex + '.log'
+    format = '%Y%m%d%H%M%S'
+    filename = datetime.datetime.now().strftime(format)
+    extension = '.log'
+    folder = 'log'
+    return os.path.join('log', filename + '.log')
+
+target_file = generate_filename()
 
 log_file = '/var/log/siege.log'
 #duration = '10S'  # seconds
@@ -21,3 +33,4 @@ custom_log_line_length = 131
 plotting = True
 
 test_type = 'load test'
+
