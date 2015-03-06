@@ -1,4 +1,4 @@
-VERSION = '0.05'
+VERSION = '0.11'
 
 url = None
 url_file = None
