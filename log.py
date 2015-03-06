@@ -36,13 +36,7 @@ class Log(object):
         groups = self._get_groups()
         groups_rate = {}
         for group_id, group in groups.items():
-            #trans_rate_list = []
-            #for log in group:
-            #    log = log.split(',')
-            #    test_trans_rate = float(log[-5])
-            #    trans_rate_list.append(test_trans_rate)
             group_trans_rate = self._get_final_result(group, 'trans_rate', -5)
-            #group_trans_rate = self._get_average_rate(trans_rate_list)
             groups_rate[group_id] = group_trans_rate
         return groups_rate
 
@@ -50,19 +44,13 @@ class Log(object):
         groups = self._get_groups()
         groups_rate = {}
         for group_id, group in groups.items():
-            #trans_rate_list = []
-            #for log in group:
-            #    log = log.split(',')
-            #    test_trans_rate = float(log[-6])
-            #    trans_rate_list.append(test_trans_rate)
-            #group_trans_rate = self._get_average_rate(trans_rate_list)
             group_resp_time = self._get_final_result(group, 'resp_time', -6)
             groups_rate[group_id] = group_resp_time
         return groups_rate
 
     def _get_final_result(self, logs_list, result_type, position=None):
         """
-        Get the arrive rate of one group test.
+        Get the final result of one group.
 
         :param logs_list: A list of logs to computed.
         :return: float format. the rate.
@@ -73,7 +61,7 @@ class Log(object):
 
     def _get_each_result(self, log, result_type, position):
         """
-        Computing the arrive rate of one-line from a log file.
+        Computing or direct getting the result of one-line from a log file.
 
         :param log: A one-line log waiting for computing
         :return: Float. The arrive rate.
@@ -91,6 +79,15 @@ class Log(object):
 
 
     def _get_result_list(self, log_list, result_type, position):
+        """
+        Extracting every particular testing elements from a log list to compose
+        to a result list.
+
+        :param log_list: The source list of results.
+        :param result_type: The project type of analyzing.
+        :param position: Where the element is in a single log.
+        :return: The list of results. List.
+        """
         result_list = []
         for log in log_list:
             result = self._get_each_result(log, result_type, position)

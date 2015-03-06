@@ -10,6 +10,12 @@ from settings import *
 
 
 def parse_args():
+    """
+    Parsing shell command arguments, and override appropriate params
+    from setting module
+
+    :return: None
+    """
     parser = argparse.ArgumentParser(version=VERSION)
     parser.add_argument('-u', action='store', dest='url')
     parser.add_argument('-f', action='store', dest='url_file')
@@ -50,6 +56,11 @@ def parse_args():
 
 
 def check_url_source():
+    """
+    Check out Obtaining url from commend line or urls file.
+
+    :return: A flag that represent the source of urls. String'
+    """
     global plotting
     if not url_file and not url:
         plotting = False
@@ -69,6 +80,14 @@ def check_url_source():
 
 
 def test(base_concurrent):
+    """
+    Main method to do the Testing.
+    Looping siege tool until some conditions satisfied,
+    and generate a new log file from siege log file.
+
+    :param base_concurrent: number concurrent
+    :return: None
+    """
     url_source = check_url_source()
     while True:
         for i in range(num_samples):
@@ -86,7 +105,8 @@ def test(base_concurrent):
                                 concurrent=base_concurrent,
                                 #duration=duration))
                                 repeat=repeat))
-            last = Log.get_last_logs(log_file, siege_log_line_length, 1, base_concurrent)
+            last = Log.get_last_logs(log_file, siege_log_line_length, 1,\
+                    base_concurrent)
             Log.add_new_log(target_file, last)
 
         base_concurrent += step_concurrent
@@ -97,16 +117,33 @@ def test(base_concurrent):
             break
 
 def plot():
+    """
+    Plotting chat using the data that analyzed from testing log.
+
+    :return: None
+    """
     log = Log(target_file)
     trans_rate_dict = log.get_steps_trans_rate()
     arrive_rate_dict = log.get_steps_arrive_rate()
     resp_time_dict = log.get_steps_resp_time()
 
-    trans_trend = Trend('Transaction Rate', 'simulated users', 'trans rate (trans/sec)', 'g', 1, 'bar', step_concurrent/2)
+    trans_trend = Trend('Transaction Rate',
+                        'simulated users',
+                        'trans rate (trans/sec)',
+                        'g', 1, 'bar',
+                        step_concurrent/2)
     trans_trend.get_points(trans_rate_dict)
-    arrive_trend = Trend('Arrive Rate', 'simulated users', 'arrive rate', 'g', 2, 'line')
+
+    arrive_trend = Trend('Arrive Rate',
+                         'simulated users',
+                         'arrive rate',
+                         'g', 2, 'line')
     arrive_trend.get_points(arrive_rate_dict)
-    resp_trend= Trend('Resp Time', 'simulated users', 'time(sec)', 'r', 2, 'line')
+
+    resp_trend = Trend('Resp Time',
+                       'simulated users',
+                       'time(sec)',
+                       'r', 2, 'line')
     resp_trend.get_points(resp_time_dict)
 
     pl(trans_trend, resp_trend, arrive_trend)
