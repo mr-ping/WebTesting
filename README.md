@@ -17,8 +17,18 @@ WEB基准测试（下版添加）
 Linux, Unix, BSD
 
 ###依赖：
+环境：  
+Python2  
+matplotlib  
+工具：  
 siege  
-matplotlib
+
+###安装（Ubuntu）：
+```python
+$ sudo apt-get install python2.7
+$ sudo pip install matplotlib
+$ sudo apt-get siege
+```
 
 ###运行：
 
